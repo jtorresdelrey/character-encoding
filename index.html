@@ -148,7 +148,7 @@
             </div>
         </section>
 
-        <!-- Codificaciones -->
+        <!-- Evolución -->
         <section id="context" class="max-w-6xl mx-auto space-y-8 animate-fade-in">
             <div class="border-l-4 border-indigo-600 pl-6">
                 <h2 class="text-3xl font-extrabold text-slate-900 mb-1">Mapa de la evolución de la codificación</h2>
@@ -236,7 +236,7 @@
                                 </td>
                                 <td class="bg-indigo-50/30 text-center">
                                     <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center">xC2 xBF</div>
-                                    <div class="flex gap-4 mt-2 justify-center text-center">
+                                    <div class="flex gap-4 mt-2 justify-center">
                                         <div class="font-mono text-xs text-slate-400">B1: <span class="bit-control">110</span><span class="bit-data">00010</span></div>
                                         <div class="font-mono text-xs text-slate-400">B2: <span class="bit-control">10</span><span class="bit-data">111111</span></div>
                                     </div>
@@ -251,8 +251,8 @@
                                     <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">11110001</span></div>
                                 </td>
                                 <td class="bg-indigo-50/30 text-center">
-                                    <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center">xC3 xB1</div>
-                                    <div class="flex gap-4 mt-2 justify-center text-center">
+                                    <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center uppercase">xC3 xB1</div>
+                                    <div class="flex gap-4 mt-2 justify-center">
                                         <div class="font-mono text-xs text-slate-400">B1: <span class="bit-control">110</span><span class="bit-data">00011</span></div>
                                         <div class="font-mono text-xs text-slate-400">B2: <span class="bit-control">10</span><span class="bit-data">110001</span></div>
                                     </div>
@@ -343,7 +343,7 @@
                     <div class="flex items-start gap-4 p-4 border-t md:border-t-0 md:border-l border-slate-200 justify-center lg:justify-start">
                         <span class="text-3xl">⚠️</span>
                         <div>
-                            <p class="font-bold text-slate-800">Rombos negros con interrogación (?)</p>
+                            <p class="font-bold text-slate-800">Rombos negros con interrogación (<span class="text-red-600 font-bold">?</span>)</p>
                             <p class="text-sm text-stone-500 leading-relaxed">El archivo es <strong>ANSI</strong> pero tu editor espera <strong>UTF-8</strong>.</p>
                         </div>
                     </div>
@@ -422,6 +422,7 @@
     </footer>
 
     <script>
+        // --- 1. CONFIGURACIÓN DE BITS ---
         const bitContainer = document.getElementById('bit-container');
         const decimalDisplay = document.getElementById('decimal-display');
         const hexDisplay = document.getElementById('hex-display');
@@ -449,6 +450,7 @@
             binaryDisplayFormatted.innerText = bStr.substring(0,4) + ' ' + bStr.substring(4);
         }
 
+        // --- 2. SIMULADOR MOJIBAKE ---
         function simulate() {
             const text = document.getElementById('inputText').value;
             const saveEnc = document.getElementById('saveEncoding').value;
@@ -469,7 +471,7 @@
                 charGroup.className = "flex flex-col items-center gap-3 border-2 border-slate-100 p-4 rounded-2xl bg-white shadow-sm min-w-[80px]";
                 
                 const charLabel = document.createElement('div');
-                charLabel.className = "text-sm font-black text-indigo-500 tracking-tighter mb-1 border-b-2 border-indigo-50 w-full text-center pb-2";
+                charLabel.className = "text-sm font-black text-indigo-500 uppercase tracking-tighter mb-1 border-b-2 border-indigo-50 w-full text-center pb-2";
                 let labelText = char === " " ? "esp" : `'${char}'`;
                 if (charBytes.length > 1 && saveEnc === 'UTF-8') labelText += ` <span class="text-slate-300 font-normal ml-1 text-[10px]">(${codePoint})</span>`;
                 charLabel.innerHTML = labelText; charGroup.appendChild(charLabel);
@@ -489,7 +491,8 @@
                     let individualInterpret = (readEnc === 'UTF-8' && (b >= 0x80)) ? '' : individualInterpretDecoder.decode(new Uint8Array([b]));
                     if (b < 32) individualInterpret = '·';
                     
-                    card.innerHTML = `<div class="font-mono font-black text-indigo-700 text-xl tracking-wider"><span class="text-indigo-400">x</span>${b.toString(16).toUpperCase().padStart(2, '0')}</div><div class="text-[10px] text-slate-400 font-mono">${formattedBin}</div><div class="mt-3 pt-2 border-t border-slate-200 text-[10px] flex justify-between"><span class="text-slate-400 font-bold">Lector</span><span class="font-bold text-red-500">${individualInterpret}</span></div>`;
+                    // Actualización: Fuente más grande para Lector y carácter interpretado
+                    card.innerHTML = `<div class="font-mono font-black text-indigo-700 text-xl uppercase tracking-wider"><span class="text-indigo-400 lowercase">x</span>${b.toString(16).toUpperCase().padStart(2, '0')}</div><div class="text-[10px] text-slate-400 font-mono">${formattedBin}</div><div class="mt-3 pt-2 border-t border-slate-200 text-sm flex justify-between"><span class="text-slate-400 font-bold">Lector</span><span class="font-bold text-red-500 text-xl">${individualInterpret}</span></div>`;
                     bytesContainer.appendChild(card);
                 });
                 charGroup.appendChild(bytesContainer);
@@ -527,8 +530,13 @@
         }
 
         function simpleAnsiEncode(str) {
-            const arr = []; const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80};
-            for (let char of str) { const code = char.charCodeAt(0); if (code < 128) arr.push(code); else arr.push(map[char] || 63); }
+            const arr = []; 
+            const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80};
+            for (let char of str) { 
+                const code = char.charCodeAt(0); 
+                if (code < 128) arr.push(code);
+                else arr.push(map[char] || 63);
+            }
             return new Uint8Array(arr);
         }
 
@@ -545,7 +553,7 @@
             } else {
                 resBox.className = "p-8 rounded-2xl border-2 mb-8 bg-red-50 border-red-200 text-center";
                 resText.innerText = "atenciÃ³n"; resText.className = "text-5xl font-mono font-bold text-red-700";
-                fb.innerHTML = "<strong class='text-red-700'>¡Error fatal! 💀</strong><br>Has cometido el pecado capital. Al dar a «Convertir», has fijado el error en el disco. Has sobrescrito el código de la «ñ» con los códigos de «Ã» y «³». El texto original se ha perdido para siempre.";
+                fb.innerHTML = "<strong class='text-red-700'>¡Error fatal! 💀</strong><br>Has cometido el pecado capital. Al dar a «Convertir», has fijado el error en el disco. Has sobrescrito el código de la «ñ» con los códigos de «Ã» y «³». El texto original se ha destruido.";
                 fb.className = "p-8 rounded-2xl border-l-8 bg-white shadow-xl border-red-500 text-red-900 block";
             }
         }
@@ -560,30 +568,55 @@
             document.getElementById('javaOutput').innerText = `\\u${code.toString(16).toUpperCase().padStart(4, '0')}`;
         }
 
-        function scrollToSection(id) { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.offsetTop - 100, behavior: "smooth" }); }
+        function scrollToSection(id) { 
+            const el = document.getElementById(id);
+            if (el) {
+                window.scrollTo({ top: el.offsetTop - 100, behavior: "smooth" }); 
+            }
+        }
 
+        // --- 5. NAVEGACIÓN DINÁMICA (SCROLLSPY) ---
         function initScrollSpy() {
             const sections = ['intro', 'bits', 'context', 'standards', 'simulator', 'solution', 'escaping'];
-            const observerOptions = { rootMargin: '-10% 0px -80% 0px', threshold: 0 };
+            const observerOptions = { 
+                rootMargin: '-10% 0px -80% 0px',
+                threshold: 0 
+            };
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.id;
                         document.querySelectorAll('.nav-btn').forEach(btn => {
-                            if (btn.getAttribute('data-section') === id) { btn.classList.add('nav-link-active'); btn.classList.remove('text-slate-500'); }
-                            else { btn.classList.remove('nav-link-active'); btn.classList.add('text-slate-500'); }
+                            if (btn.getAttribute('data-section') === id) {
+                                btn.classList.add('nav-link-active');
+                                btn.classList.remove('text-slate-500');
+                            } else {
+                                btn.classList.remove('nav-link-active');
+                                btn.classList.add('text-slate-500');
+                            }
                         });
                     }
                 });
             }, observerOptions);
-            sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) observer.observe(el);
+            });
         }
 
         document.getElementById('inputText').oninput = simulate;
         document.getElementById('saveEncoding').onchange = simulate;
         document.getElementById('readEncoding').onchange = simulate;
         document.getElementById('escapeInput').oninput = updateEscapes;
-        window.onload = () => { renderBits(); simulate(); updateEscapes(); initScrollSpy(); };
+
+        window.onload = () => { 
+            renderBits(); 
+            simulate(); 
+            updateEscapes(); 
+            initScrollSpy();
+        };
     </script>
 </body>
 </html>
