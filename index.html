@@ -251,7 +251,7 @@
                                     <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">11110001</span></div>
                                 </td>
                                 <td class="bg-indigo-50/30 text-center">
-                                    <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center uppercase">xC3 xB1</div>
+                                    <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center">xC3 xB1</div>
                                     <div class="flex gap-4 mt-2 justify-center">
                                         <div class="font-mono text-xs text-slate-400">B1: <span class="bit-control">110</span><span class="bit-data">00011</span></div>
                                         <div class="font-mono text-xs text-slate-400">B2: <span class="bit-control">10</span><span class="bit-data">110001</span></div>
@@ -471,7 +471,7 @@
                 charGroup.className = "flex flex-col items-center gap-3 border-2 border-slate-100 p-4 rounded-2xl bg-white shadow-sm min-w-[80px]";
                 
                 const charLabel = document.createElement('div');
-                charLabel.className = "text-sm font-black text-indigo-500 uppercase tracking-tighter mb-1 border-b-2 border-indigo-50 w-full text-center pb-2";
+                charLabel.className = "text-sm font-black text-indigo-500 tracking-tighter mb-1 border-b-2 border-indigo-50 w-full text-center pb-2";
                 let labelText = char === " " ? "esp" : `'${char}'`;
                 if (charBytes.length > 1 && saveEnc === 'UTF-8') labelText += ` <span class="text-slate-300 font-normal ml-1 text-[10px]">(${codePoint})</span>`;
                 charLabel.innerHTML = labelText; charGroup.appendChild(charLabel);
