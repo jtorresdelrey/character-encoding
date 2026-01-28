@@ -318,10 +318,26 @@
                     </div>
 
                     <div class="space-y-6">
+                        <!-- HTML Entities Box -->
                         <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-inner">
-                            <span class="block text-xs uppercase font-bold text-slate-500 mb-2 tracking-wider">Para HTML (Entidad)</span>
-                            <span id="htmlOutput" class="font-mono text-3xl text-green-400 font-bold">&ntilde;</span>
+                            <span class="block text-xs uppercase font-bold text-slate-500 mb-4 tracking-wider">Para HTML (Entidades)</span>
+                            <div class="space-y-3 font-mono">
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <span class="text-slate-500 text-xs">Nombrada</span>
+                                    <span id="htmlNamed" class="text-green-400 font-bold text-xl"></span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <span class="text-slate-500 text-xs">Decimal</span>
+                                    <span id="htmlDecimal" class="text-green-400 font-bold text-xl"></span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 text-xs">Hexadecimal</span>
+                                    <span id="htmlHex" class="text-green-400 font-bold text-xl"></span>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Java Escape Box -->
                         <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-inner">
                             <span class="block text-xs uppercase font-bold text-slate-500 mb-2 tracking-wider">Para Java / C++ (Unicode Escape)</span>
                             <span id="javaOutput" class="font-mono text-3xl text-yellow-400 font-bold">\u00F1</span>
@@ -404,7 +420,6 @@
                 const charLabel = document.createElement('div');
                 charLabel.className = "text-xs font-black text-indigo-500 uppercase tracking-tighter mb-1";
                 let labelText = char === " " ? "espacio" : `'${char}'`;
-                // Optional: Show code point if multibyte
                 if (charBytes.length > 1 && saveEnc === 'UTF-8') {
                     labelText += ` <span class="text-stone-400 font-normal">(${codePoint})</span>`;
                 }
@@ -528,11 +543,15 @@
         // --- ESCAPE LOGIC ---
         function updateEscapes() {
             const input = document.getElementById('escapeInput').value;
-            const htmlOut = document.getElementById('htmlOutput');
+            const htmlNamed = document.getElementById('htmlNamed');
+            const htmlDecimal = document.getElementById('htmlDecimal');
+            const htmlHex = document.getElementById('htmlHex');
             const javaOut = document.getElementById('javaOutput');
 
             if (!input) {
-                htmlOut.innerText = "...";
+                htmlNamed.innerText = "-";
+                htmlDecimal.innerText = "-";
+                htmlHex.innerText = "-";
                 javaOut.innerText = "...";
                 return;
             }
@@ -540,8 +559,11 @@
             const charCode = input.charCodeAt(0);
             
             // HTML Entity (simple map for demo or numeric fallback)
-            const entities = {'ñ': '&ntilde;', 'Ñ': '&Ntilde;', 'á': '&aacute;', 'é': '&eacute;', '€': '&euro;', '<': '&lt;', '>': '&gt;', '&': '&amp;'};
-            htmlOut.innerText = entities[input] || `&#${charCode};`;
+            const entities = {'ñ': '&ntilde;', 'Ñ': '&Ntilde;', 'á': '&aacute;', 'é': '&eacute;', 'í': '&iacute;', 'ó': '&oacute;', 'ú': '&uacute;', 'Á': '&Aacute;', 'É': '&Eacute;', 'Í': '&Iacute;', 'Ó': '&Oacute;', 'Ú': '&Uacute;', 'ü': '&uuml;', 'Ü': '&Uuml;', '€': '&euro;', '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'};
+            
+            htmlNamed.innerText = entities[input] || '(n/a)';
+            htmlDecimal.innerText = `&#${charCode};`;
+            htmlHex.innerText = `&#x${charCode.toString(16).toUpperCase()};`;
 
             // Java Unicode
             const hex = charCode.toString(16).toUpperCase().padStart(4, '0');
@@ -560,4 +582,3 @@
     </script>
 </body>
 </html>
-```
