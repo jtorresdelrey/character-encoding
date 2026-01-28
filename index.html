@@ -85,8 +85,9 @@
                 </div>
                 <div id="main-nav" class="hidden md:flex space-x-1 items-center text-sm font-semibold">
                     <button data-section="intro" onclick="scrollToSection('intro')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Inicio</button>
-                    <button data-section="bits" onclick="scrollToSection('bits')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Laboratorio de bits</button>
-                    <button data-section="context" onclick="scrollToSection('context')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Mapa de la evolución de la codificación</button>
+                    <button data-section="bits" onclick="scrollToSection('bits')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Bits</button>
+                    <button data-section="context" onclick="scrollToSection('context')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Codificaciones</button>
+                    <button data-section="standards" onclick="scrollToSection('standards')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Estándares</button>
                     <button data-section="simulator" onclick="scrollToSection('simulator')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Mojibake</button>
                     <button data-section="solution" onclick="scrollToSection('solution')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Soluciones</button>
                     <button data-section="escaping" onclick="scrollToSection('escaping')" class="nav-btn text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-full hover:bg-slate-50 transition">Escapado</button>
@@ -147,11 +148,11 @@
             </div>
         </section>
 
-        <!-- Evolución -->
+        <!-- Codificaciones -->
         <section id="context" class="max-w-6xl mx-auto space-y-8 animate-fade-in">
             <div class="border-l-4 border-indigo-600 pl-6">
                 <h2 class="text-3xl font-extrabold text-slate-900 mb-1">Mapa de la evolución de la codificación</h2>
-                <p class="text-slate-400 text-sm italic font-medium">Un punto de código es simplemente el número único que el estándar asigna a cada letra o símbolo para identificarlo en su 'diccionario' (término que usamos como sinónimo de <strong>tabla</strong> o <strong>conjunto de caracteres</strong>).</p>
+                <p class="text-slate-400 text-sm italic font-medium">Un punto de código es simplemente el número único que el estándar asigna a cada letra o símbolo para identificarlo en su 'diccionario' (<strong>tabla</strong> o <strong>conjunto de caracteres</strong>).</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col h-full">
@@ -191,7 +192,7 @@
                             <tr>
                                 <th class="border-b border-slate-800 w-32 text-center">Carácter</th>
                                 <th class="border-b border-slate-800">ASCII (7 bits)</th>
-                                <th class="border-b border-slate-800">ANSI (Win-1252)</th>
+                                <th class="border-b border-slate-800">ANSI / Latin-1 (8 bits)</th>
                                 <th class="border-b border-indigo-900 text-indigo-100 text-center">Unicode (UTF-8)</th>
                             </tr>
                         </thead>
@@ -200,7 +201,7 @@
                                 <td class="font-bold text-4xl text-center bg-slate-50 group-hover:bg-indigo-50/30 transition-colors text-slate-700">A</td>
                                 <td>
                                     <div class="font-mono text-emerald-600 font-bold text-lg">x41 (65)</div>
-                                    <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">01000001</span></div>
+                                    <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">1000001</span></div>
                                 </td>
                                 <td>
                                     <div class="font-mono text-emerald-600 font-bold text-lg">x41 (65)</div>
@@ -215,7 +216,7 @@
                                 <td class="font-bold text-4xl text-center bg-slate-50 group-hover:bg-indigo-50/30 transition-colors text-slate-700">a</td>
                                 <td>
                                     <div class="font-mono text-emerald-600 font-bold text-lg">x61 (97)</div>
-                                    <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">01100001</span></div>
+                                    <div class="font-mono text-xs text-slate-400 mt-2">Bits: <span class="bit-data">1100001</span></div>
                                 </td>
                                 <td>
                                     <div class="font-mono text-emerald-600 font-bold text-lg">x61 (97)</div>
@@ -235,7 +236,7 @@
                                 </td>
                                 <td class="bg-indigo-50/30 text-center">
                                     <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center">xC2 xBF</div>
-                                    <div class="flex gap-4 mt-2 justify-center">
+                                    <div class="flex gap-4 mt-2 justify-center text-center">
                                         <div class="font-mono text-xs text-slate-400">B1: <span class="bit-control">110</span><span class="bit-data">00010</span></div>
                                         <div class="font-mono text-xs text-slate-400">B2: <span class="bit-control">10</span><span class="bit-data">111111</span></div>
                                     </div>
@@ -251,7 +252,7 @@
                                 </td>
                                 <td class="bg-indigo-50/30 text-center">
                                     <div class="font-mono text-indigo-700 font-bold text-lg flex gap-3 justify-center">xC3 xB1</div>
-                                    <div class="flex gap-4 mt-2 justify-center">
+                                    <div class="flex gap-4 mt-2 justify-center text-center">
                                         <div class="font-mono text-xs text-slate-400">B1: <span class="bit-control">110</span><span class="bit-data">00011</span></div>
                                         <div class="font-mono text-xs text-slate-400">B2: <span class="bit-control">10</span><span class="bit-data">110001</span></div>
                                     </div>
@@ -342,7 +343,7 @@
                     <div class="flex items-start gap-4 p-4 border-t md:border-t-0 md:border-l border-slate-200 justify-center lg:justify-start">
                         <span class="text-3xl">⚠️</span>
                         <div>
-                            <p class="font-bold text-slate-800">Rombos negros ()</p>
+                            <p class="font-bold text-slate-800">Rombos negros con interrogación (?)</p>
                             <p class="text-sm text-stone-500 leading-relaxed">El archivo es <strong>ANSI</strong> pero tu editor espera <strong>UTF-8</strong>.</p>
                         </div>
                     </div>
@@ -395,13 +396,13 @@
                         <span class="block text-xs uppercase font-bold text-slate-500 mb-6 tracking-wider">HTML (Entidades)</span>
                         <div class="space-y-4">
                             <div class="flex justify-between border-b border-slate-900 pb-3">
-                                <span class="text-slate-600">Nombrada</span><span id="htmlNamed" class="text-green-400 font-bold"></span>
+                                <span class="text-slate-600">Nombrada</span><span id="htmlNamed" class="text-green-400 font-bold text-2xl"></span>
                             </div>
                             <div class="flex justify-between border-b border-slate-900 pb-3">
-                                <span class="text-slate-600">Decimal</span><span id="htmlDecimal" class="text-green-400 font-bold"></span>
+                                <span class="text-slate-600">Decimal</span><span id="htmlDecimal" class="text-green-400 font-bold text-2xl"></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-600">Hexadecimal</span><span id="htmlHex" class="text-green-400 font-bold"></span>
+                                <span class="text-slate-600">Hexadecimal</span><span id="htmlHex" class="text-green-400 font-bold text-2xl"></span>
                             </div>
                         </div>
                     </div>
@@ -421,7 +422,6 @@
     </footer>
 
     <script>
-        // --- 1. CONFIGURACIÓN DE BITS ---
         const bitContainer = document.getElementById('bit-container');
         const decimalDisplay = document.getElementById('decimal-display');
         const hexDisplay = document.getElementById('hex-display');
@@ -449,7 +449,6 @@
             binaryDisplayFormatted.innerText = bStr.substring(0,4) + ' ' + bStr.substring(4);
         }
 
-        // --- 2. SIMULADOR MOJIBAKE ---
         function simulate() {
             const text = document.getElementById('inputText').value;
             const saveEnc = document.getElementById('saveEncoding').value;
@@ -528,13 +527,8 @@
         }
 
         function simpleAnsiEncode(str) {
-            const arr = []; 
-            const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80};
-            for (let char of str) { 
-                const code = char.charCodeAt(0); 
-                if (code < 128) arr.push(code);
-                else arr.push(map[char] || 63);
-            }
+            const arr = []; const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80};
+            for (let char of str) { const code = char.charCodeAt(0); if (code < 128) arr.push(code); else arr.push(map[char] || 63); }
             return new Uint8Array(arr);
         }
 
@@ -566,55 +560,30 @@
             document.getElementById('javaOutput').innerText = `\\u${code.toString(16).toUpperCase().padStart(4, '0')}`;
         }
 
-        function scrollToSection(id) { 
-            const el = document.getElementById(id);
-            if (el) {
-                window.scrollTo({ top: el.offsetTop - 100, behavior: "smooth" }); 
-            }
-        }
+        function scrollToSection(id) { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.offsetTop - 100, behavior: "smooth" }); }
 
-        // --- 5. NAVEGACIÓN DINÁMICA (SCROLLSPY) ---
         function initScrollSpy() {
             const sections = ['intro', 'bits', 'context', 'standards', 'simulator', 'solution', 'escaping'];
-            const observerOptions = { 
-                rootMargin: '-10% 0px -80% 0px',
-                threshold: 0 
-            };
-            
+            const observerOptions = { rootMargin: '-10% 0px -80% 0px', threshold: 0 };
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.id;
                         document.querySelectorAll('.nav-btn').forEach(btn => {
-                            if (btn.getAttribute('data-section') === id) {
-                                btn.classList.add('nav-link-active');
-                                btn.classList.remove('text-slate-500');
-                            } else {
-                                btn.classList.remove('nav-link-active');
-                                btn.classList.add('text-slate-500');
-                            }
+                            if (btn.getAttribute('data-section') === id) { btn.classList.add('nav-link-active'); btn.classList.remove('text-slate-500'); }
+                            else { btn.classList.remove('nav-link-active'); btn.classList.add('text-slate-500'); }
                         });
                     }
                 });
             }, observerOptions);
-
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) observer.observe(el);
-            });
+            sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
         }
 
         document.getElementById('inputText').oninput = simulate;
         document.getElementById('saveEncoding').onchange = simulate;
         document.getElementById('readEncoding').onchange = simulate;
         document.getElementById('escapeInput').oninput = updateEscapes;
-
-        window.onload = () => { 
-            renderBits(); 
-            simulate(); 
-            updateEscapes(); 
-            initScrollSpy();
-        };
+        window.onload = () => { renderBits(); simulate(); updateEscapes(); initScrollSpy(); };
     </script>
 </body>
 </html>
