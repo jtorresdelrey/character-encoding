@@ -277,8 +277,8 @@
                     </div>
                     <div class="flex flex-col">
                         <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">Diagnóstico</h4>
-                        <div id="analysis-box" class="p-8 rounded-2xl bg-white border border-stone-200 text-stone-700 text-lg leading-relaxed shadow-sm flex-grow flex items-center">
-                            <!-- Análisis dinámico -->
+                        <div id="analysis-box" class="p-0 rounded-2xl leading-relaxed flex-grow">
+                            <!-- Análisis dinámico se inyectará aquí -->
                         </div>
                     </div>
                 </div>
@@ -582,19 +582,65 @@
             document.getElementById('result-text').innerText = decoded;
 
             // Análisis del resultado
+            const aBox = document.getElementById('analysis-box');
+            // Reset styles
+            aBox.className = "p-6 rounded-2xl border flex-grow transition-all duration-300";
+
             if (text === decoded) {
-                analysis.className = "p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-lg leading-relaxed shadow-sm flex-grow flex items-center";
-                analysis.innerHTML = "<strong>✅ Todo correcto.</strong><br>El diccionario de lectura coincide con el de escritura. Los bytes se interpretan coherentemente.";
+                // SUCCESS
+                aBox.classList.add('bg-emerald-50', 'border-emerald-200');
+                aBox.innerHTML = `
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="bg-emerald-200 text-emerald-800 w-10 h-10 rounded-full flex items-center justify-center text-xl">✅</div>
+                        <h5 class="text-xl font-bold text-emerald-900">Todo correcto</h5>
+                    </div>
+                    <p class="text-emerald-800 leading-relaxed">El diccionario de lectura coincide con el de escritura. Los bytes se interpretan coherentemente.</p>
+                `;
             } else {
-                analysis.className = "p-8 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-lg leading-relaxed shadow-sm flex-grow flex items-center";
+                // ERROR
+                aBox.classList.add('bg-red-50', 'border-red-200');
                 
+                let errorTitle = "";
+                let errorCause = "";
+                let errorMechanism = "";
+                let errorResult = "";
+
                 if (readEnc === 'windows-1252' && saveEnc === 'UTF-8') {
-                    analysis.innerHTML = `<strong>❌ Mojibake detectado.</strong><br>Estás leyendo con <strong>ANSI</strong> (que espera 1 byte/letra). Al encontrar una letra UTF-8 de 2 bytes, el lector "tonto" lee cada mitad por separado. <br>Resultado: 1 letra original ➝ 2 símbolos basura.`;
+                    errorTitle = "Mojibake detectado";
+                    errorCause = "Estás leyendo con <strong>ANSI</strong> (que espera 1 byte/letra).";
+                    errorMechanism = "Al encontrar una letra UTF-8 de 2 bytes, el lector 'tonto' lee cada mitad por separado.";
+                    errorResult = "1 letra original ➝ 2 símbolos basura.";
                 } else if (saveEnc === 'windows-1252' && readEnc === 'UTF-8') {
-                    analysis.innerHTML = `<strong>❌ Error de validación ().</strong><br>El archivo es ANSI (1 byte). Pero el lector UTF-8 encuentra un byte que empieza por <code>1111...</code> (como la ñ = F1). En UTF-8, eso es una promesa de que vienen 3 bytes más. Al no encontrarlos, declara el dato <strong>inválido</strong>.`;
+                    errorTitle = "Error de validación ()";
+                    errorCause = "El archivo es <strong>ANSI</strong> (1 byte).";
+                    errorMechanism = "El lector UTF-8 encuentra un byte que <strong>no existe por sí solo</strong>. Sus bits iniciales (ej. <code>1111...</code> para la ñ) señalan el <strong>inicio de una secuencia de 4 bytes</strong> (o los que correspondan según el prefijo). Al no hallar el resto, da error.";
+                    errorResult = "Dato inválido (rombo negro).";
                 } else {
-                    analysis.innerHTML = `<strong>❌ Incompatibilidad.</strong><br>Las tablas no coinciden. Los números guardados apuntan a casillas diferentes en el diccionario de lectura.`;
+                    errorTitle = "Incompatibilidad";
+                    errorCause = "Tablas incorrectas.";
+                    errorMechanism = "Los números guardados no coinciden con el diccionario de lectura.";
+                    errorResult = "Texto roto.";
                 }
+
+                aBox.innerHTML = `
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-red-200 text-red-800 w-10 h-10 rounded-full flex items-center justify-center text-xl">❌</div>
+                        <h5 class="text-xl font-bold text-red-900">${errorTitle}</h5>
+                    </div>
+                    <div class="space-y-3 text-sm text-red-900">
+                        <div class="bg-white/60 p-3 rounded-lg border border-red-100">
+                            <span class="font-bold text-red-700 uppercase text-xs tracking-wide">Causa</span>
+                            <p class="mt-1">${errorCause}</p>
+                        </div>
+                        <div class="bg-white/60 p-3 rounded-lg border border-red-100">
+                            <span class="font-bold text-red-700 uppercase text-xs tracking-wide">Mecánica</span>
+                            <p class="mt-1">${errorMechanism}</p>
+                        </div>
+                        <div class="bg-red-100 p-2 rounded-lg border border-red-200 text-center font-bold text-red-800">
+                            ${errorResult}
+                        </div>
+                    </div>
+                `;
             }
         }
 
@@ -713,4 +759,3 @@
     </script>
 </body>
 </html>
-```
