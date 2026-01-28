@@ -4,111 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía interactiva: codificación de caracteres en localización</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Estilos personalizados para componentes interactivos */
         .bit-switch {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .bit-switch.active {
-            background-color: #4F46E5;
+            background-color: #4F46E5; /* Indigo 600 */
             color: white;
             border-color: #4F46E5;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
         }
+        
         .byte-card {
-            min-width: 120px;
+            min-width: 125px;
             text-align: center;
+            transition: transform 0.2s;
         }
+        .byte-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Ocultar barra de scroll en contenedores horizontales */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
-        .bit-data { color: #4F46E5; font-weight: bold; }
-        .bit-control { color: #9ca3af; }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Colores semánticos para bits */
+        .bit-data { color: #4F46E5; font-weight: 800; }
+        .bit-control { color: #9ca3af; font-weight: 400; }
+        
+        /* Ajustes para tabla grande */
         .table-big td, .table-big th { padding: 1.25rem 1rem; }
         
         /* Estilo neutral para botones de decisión */
         .btn-decision {
             background-color: white;
             border: 2px solid #e5e7eb;
-            color: #4b5563;
+            color: #374151;
             transition: all 0.2s;
         }
         .btn-decision:hover {
             border-color: #4f46e5;
             color: #4f46e5;
             background-color: #eef2ff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
     </style>
-    <!-- Chosen Palette: Warm Neutrals & Professional Indigo -->
+    <!-- Chosen Palette: Warm Neutrals & Professional Indigo + Terminal High Contrast -->
 </head>
-<body class="bg-stone-50 text-stone-800 font-sans leading-relaxed text-base">
+<body class="bg-stone-50 text-stone-800 font-sans leading-relaxed text-base selection:bg-indigo-100 selection:text-indigo-900">
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <!-- Navegación -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50 backdrop-blur-md bg-white/90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <span class="text-xl font-bold text-indigo-700">LocCode<span class="text-stone-500 text-sm font-normal ml-2">guía para traductores</span></span>
+                    <span class="text-xl font-bold text-indigo-700 tracking-tight">LocCode<span class="text-stone-500 text-sm font-normal ml-2">guía para traductores</span></span>
                 </div>
-                <div class="hidden md:flex space-x-8 items-center text-sm font-medium">
-                    <button onclick="scrollToSection('intro')" class="text-stone-600 hover:text-indigo-600">Inicio</button>
-                    <button onclick="scrollToSection('bits')" class="text-stone-600 hover:text-indigo-600">Bits y bytes</button>
-                    <button onclick="scrollToSection('standards')" class="text-stone-600 hover:text-indigo-600">Estándares</button>
-                    <button onclick="scrollToSection('simulator')" class="text-stone-600 hover:text-indigo-600">Mojibake</button>
-                    <button onclick="scrollToSection('solution')" class="text-stone-600 hover:text-indigo-600">Soluciones</button>
-                    <button onclick="scrollToSection('escaping')" class="text-stone-600 hover:text-indigo-600">Código</button>
+                <div class="hidden md:flex space-x-1 lg:space-x-8 items-center text-sm font-medium">
+                    <button onclick="scrollToSection('intro')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Inicio</button>
+                    <button onclick="scrollToSection('bits')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Bits y bytes</button>
+                    <button onclick="scrollToSection('standards')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Estándares</button>
+                    <button onclick="scrollToSection('simulator')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Mojibake</button>
+                    <button onclick="scrollToSection('solution')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Soluciones</button>
+                    <button onclick="scrollToSection('escaping')" class="text-stone-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-stone-50 transition">Código</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-32">
 
         <!-- 1. Introducción -->
-        <section id="intro" class="text-center py-10">
-            <h1 class="text-5xl md:text-6xl font-bold text-stone-900 mb-6">El ADN del texto digital</h1>
-            <div class="max-w-3xl mx-auto space-y-4">
-                <p class="text-xl text-stone-600 text-center">
+        <section id="intro" class="text-center py-10 animate-fade-in">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-stone-900 mb-8 tracking-tight">El ADN del texto digital</h1>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <p class="text-xl text-stone-600 leading-relaxed">
                     Para un ordenador, las palabras no existen; solo existen interruptores encendidos o apagados. El problema es que cada sistema de lectura interpreta esos interruptores de forma distinta.
                 </p>
-                <p class="text-stone-500 italic text-lg text-center">
+                <p class="text-stone-500 italic text-lg border-t border-stone-200 pt-6 mt-6 inline-block px-8">
                     Entender cómo se organizan estos datos es la única forma de evitar que tus traducciones se conviertan en basura digital.
                 </p>
             </div>
-            <div class="mt-8 flex justify-center gap-4">
-                <button onclick="scrollToSection('simulator')" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition shadow-lg font-medium">
-                    Simular un error de lectura
+            <div class="mt-10 flex justify-center">
+                <button onclick="scrollToSection('simulator')" class="bg-indigo-600 text-white px-8 py-4 rounded-full hover:bg-indigo-700 transition shadow-lg hover:shadow-xl font-bold text-lg flex items-center gap-2 transform hover:-translate-y-1">
+                    <span>Simular el error</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                 </button>
             </div>
         </section>
 
-        <!-- 2. Laboratorio de bits y bytes -->
-        <section id="bits" class="bg-white rounded-2xl shadow-xl p-10 border border-stone-100">
-            <div class="mb-8 border-b border-stone-100 pb-6 text-center lg:text-left">
-                <h2 class="text-3xl font-bold text-stone-800 mb-3">Laboratorio de bits: la unidad mínima</h2>
-                <p class="text-stone-600 text-lg">
+        <!-- 2. Laboratorio de bits -->
+        <section id="bits" class="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-stone-100">
+            <div class="mb-10 border-b border-stone-100 pb-8 text-center lg:text-left">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Laboratorio de bits: la unidad mínima</h2>
+                <p class="text-stone-600 text-lg max-w-2xl">
                     Un <strong>byte</strong> es un paquete de 8 interruptores. Al combinarlos, generas un número decimal. Ese número es la «dirección» donde el ordenador busca cada letra.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <div class="flex justify-center space-x-2" id="bit-container"></div>
-                    <p class="text-center text-sm text-stone-400 font-bold uppercase tracking-wider">Toca los bits para cambiar el valor</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Interactive Bits -->
+                <div class="space-y-8">
+                    <div class="flex justify-center lg:justify-start space-x-2 md:space-x-3" id="bit-container">
+                        <!-- JS injects bits here -->
+                    </div>
+                    <p class="text-center lg:text-left text-sm text-stone-400 font-bold uppercase tracking-widest">
+                        Toca los interruptores para cambiar el valor
+                    </p>
                 </div>
 
-                <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 shadow-inner">
-                    <div class="grid grid-cols-2 gap-8 text-center md:text-left">
+                <!-- Display -->
+                <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 shadow-inner relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-100 rounded-full blur-xl opacity-50"></div>
+                    
+                    <div class="grid grid-cols-2 gap-8 text-center md:text-left relative z-10">
                         <div>
-                            <span class="block text-xs uppercase text-indigo-600 font-bold mb-2">Valor decimal</span>
-                            <span id="decimal-display" class="block text-5xl font-mono font-bold text-indigo-900">0</span>
+                            <span class="block text-xs uppercase text-indigo-600 font-extrabold mb-2 tracking-wider">Decimal</span>
+                            <span id="decimal-display" class="block text-6xl font-mono font-bold text-indigo-900 tracking-tighter">0</span>
                         </div>
                         <div>
-                            <span class="block text-xs uppercase text-indigo-600 font-bold mb-2">Código hexadecimal</span>
-                            <span id="hex-display" class="block text-5xl font-mono font-bold text-emerald-700">00</span>
+                            <span class="block text-xs uppercase text-indigo-600 font-extrabold mb-2 tracking-wider">Hexadecimal</span>
+                            <span id="hex-display" class="block text-6xl font-mono font-bold text-emerald-600 tracking-tighter">00</span>
                         </div>
                     </div>
-                    <div class="mt-8 pt-6 border-t border-indigo-200">
-                        <span class="block text-xs uppercase text-indigo-600 font-bold mb-3 text-center">Lo que procesa el hardware (binario)</span>
-                        <div class="flex justify-center font-mono text-2xl tracking-[0.5em] text-indigo-950 bg-white/50 py-2 rounded-lg" id="binary-display-formatted">
+                    <div class="mt-10 pt-8 border-t border-indigo-200 relative z-10">
+                        <span class="block text-xs uppercase text-indigo-600 font-extrabold mb-4 text-center tracking-wider">Lenguaje máquina (Binario)</span>
+                        <div class="flex justify-center font-mono text-2xl md:text-3xl tracking-[0.2em] text-indigo-950 bg-white/60 py-3 rounded-xl shadow-sm" id="binary-display-formatted">
                             0000 0000
                         </div>
                     </div>
@@ -118,229 +148,263 @@
 
         <!-- 3. Gran tabla técnica -->
         <section id="standards" class="space-y-10">
-            <div class="max-w-4xl text-center lg:text-left">
-                <h2 class="text-3xl font-bold text-stone-800 mb-4">Análisis técnico: comparación de bits por estándar</h2>
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Análisis técnico: comparación de estándares</h2>
                 <p class="text-stone-600 text-lg">
-                    Fíjate en cómo los caracteres básicos (A, a) coinciden siempre. Sin embargo, en los caracteres propios de cada lengua, <strong>UTF-8</strong> fragmenta el valor original. Al comparar <strong>ANSI</strong> con <strong>UTF-8</strong>, verás que el valor real se preserva, aunque repartido.
+                    Fíjate en cómo los caracteres básicos (A, a) coinciden siempre. Sin embargo, en los caracteres propios de cada lengua, <strong>UTF-8</strong> fragmenta el valor original. Al comparar <strong>ANSI</strong> con <strong>UTF-8</strong>, verás que el valor real se preserva, aunque repartido en varios bytes.
                 </p>
             </div>
 
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-200">
-                <table class="w-full text-left table-big">
-                    <thead class="bg-indigo-900 text-white text-xs uppercase tracking-widest">
-                        <tr>
-                            <th class="border-b border-indigo-800">Carácter</th>
-                            <th class="border-b border-indigo-800">ASCII (7 bits)</th>
-                            <th class="border-b border-indigo-800">ANSI (Win-1252)</th>
-                            <th class="border-b border-indigo-800">Unicode (UTF-8)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-stone-100 text-sm">
-                        <tr class="hover:bg-stone-50 transition">
-                            <td class="font-bold text-3xl text-center bg-stone-50">A</td>
-                            <td>
-                                <div class="font-mono text-emerald-600 font-bold text-base">x41 (65)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">01000001</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-emerald-600 font-bold text-base">x41 (65)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">01000001</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">x41 (65)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-control">0</span><span class="bit-data">1000001</span></div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-stone-50 transition">
-                            <td class="font-bold text-3xl text-center bg-stone-50">a</td>
-                            <td>
-                                <div class="font-mono text-emerald-600 font-bold text-base">x61 (97)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">01100001</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-emerald-600 font-bold text-base">x61 (97)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">01100001</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">x61 (97)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-control">0</span><span class="bit-data">1100001</span></div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-stone-50 transition">
-                            <td class="font-bold text-3xl text-center bg-stone-50 text-indigo-600 italic">¿</td>
-                            <td class="text-red-400 italic">No existe</td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">xBF (191)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">10111111</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">xC2 xBF</div>
-                                <div class="font-mono text-[10px] text-stone-400 leading-tight">
-                                    B1: <span class="bit-control">110</span><span class="bit-data">00010</span> / B2: <span class="bit-control">10</span><span class="bit-data">111111</span>
-                                </div>
-                                <div class="text-[10px] text-indigo-400 mt-1 italic">191 repartido en dos bytes</div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-stone-50 transition">
-                            <td class="font-bold text-3xl text-center bg-stone-50 text-indigo-600 italic">ñ</td>
-                            <td class="text-red-400 italic">No existe</td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">xF1 (241)</div>
-                                <div class="font-mono text-[10px] text-stone-400">Bits: <span class="bit-data">11110001</span></div>
-                            </td>
-                            <td>
-                                <div class="font-mono text-indigo-600 font-bold text-base">xC3 xB1</div>
-                                <div class="font-mono text-[10px] text-stone-400 leading-tight">
-                                    B1: <span class="bit-control">110</span><span class="bit-data">00011</span> / B2: <span class="bit-control">10</span><span class="bit-data">110001</span>
-                                </div>
-                                <div class="text-[10px] text-indigo-400 mt-1 italic uppercase tracking-tighter">241 repartido en dos bytes</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-200 ring-1 ring-black/5">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-big min-w-[800px]">
+                        <thead class="bg-indigo-900 text-white text-xs uppercase tracking-widest">
+                            <tr>
+                                <th class="border-b border-indigo-800 w-24 text-center">Letra</th>
+                                <th class="border-b border-indigo-800">ASCII (7 bits)</th>
+                                <th class="border-b border-indigo-800">ANSI (Win-1252)</th>
+                                <th class="border-b border-indigo-800 bg-indigo-800">Unicode (UTF-8)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100 text-sm">
+                            <!-- A -->
+                            <tr class="hover:bg-stone-50 transition group">
+                                <td class="font-bold text-3xl text-center bg-stone-50 group-hover:bg-indigo-50/30 transition-colors">A</td>
+                                <td>
+                                    <div class="font-mono text-emerald-600 font-bold text-base">x41 (65)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-data">01000001</span></div>
+                                </td>
+                                <td>
+                                    <div class="font-mono text-emerald-600 font-bold text-base">x41 (65)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-data">01000001</span></div>
+                                </td>
+                                <td class="bg-indigo-50/30">
+                                    <div class="font-mono text-indigo-700 font-bold text-base">x41 (65)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-control">0</span><span class="bit-data">1000001</span></div>
+                                </td>
+                            </tr>
+                            <!-- a -->
+                            <tr class="hover:bg-stone-50 transition group">
+                                <td class="font-bold text-3xl text-center bg-stone-50 group-hover:bg-indigo-50/30 transition-colors">a</td>
+                                <td>
+                                    <div class="font-mono text-emerald-600 font-bold text-base">x61 (97)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-data">01100001</span></div>
+                                </td>
+                                <td>
+                                    <div class="font-mono text-emerald-600 font-bold text-base">x61 (97)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-data">01100001</span></div>
+                                </td>
+                                <td class="bg-indigo-50/30">
+                                    <div class="font-mono text-indigo-700 font-bold text-base">x61 (97)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-control">0</span><span class="bit-data">1100001</span></div>
+                                </td>
+                            </tr>
+                            <!-- ñ -->
+                            <tr class="hover:bg-stone-50 transition group">
+                                <td class="font-bold text-3xl text-center bg-stone-50 text-indigo-600 italic group-hover:bg-indigo-50/30 transition-colors">ñ</td>
+                                <td class="text-red-400 italic text-xs">No existe</td>
+                                <td>
+                                    <div class="font-mono text-indigo-600 font-bold text-base">xF1 (241)</div>
+                                    <div class="font-mono text-[10px] text-stone-400 mt-1">Bits: <span class="bit-data">11110001</span></div>
+                                </td>
+                                <td class="bg-indigo-50/30">
+                                    <div class="font-mono text-indigo-700 font-bold text-base">xC3 xB1</div>
+                                    <div class="font-mono text-[10px] text-stone-400 leading-tight mt-1">
+                                        B1: <span class="bit-control">110</span><span class="bit-data">00011</span><br>
+                                        B2: <span class="bit-control">10</span><span class="bit-data">110001</span>
+                                    </div>
+                                    <div class="text-[10px] text-indigo-400 mt-1 italic font-medium">241 repartido en 2 bytes</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- 4. Simulador de mojibake -->
+        <!-- 4. Simulador de Mojibake -->
         <section id="simulator" class="bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-200">
-            <div class="p-10 bg-indigo-900 text-white">
-                <h2 class="text-3xl font-bold mb-3 text-center lg:text-left">El desastre del mojibake</h2>
-                <p class="text-lg opacity-90 leading-relaxed italic">
-                    El «mojibake» ocurre cuando guardas una palabra con un diccionario (codificación) y el programa intenta leerla con otro distinto. Es como si alguien te hablara en español pero tú decidieras interpretar los sonidos siguiendo las reglas del alemán: el resultado es un sinsentido total. ¡Analiza los bytes físicos de abajo para ver la rotura!
+            <div class="p-10 bg-gradient-to-r from-indigo-900 to-indigo-800 text-white">
+                <h2 class="text-3xl font-bold mb-4">El desastre del mojibake</h2>
+                <p class="text-lg opacity-90 leading-relaxed italic max-w-4xl">
+                    El «mojibake» ocurre cuando guardas una palabra con un diccionario (codificación) y el programa intenta leerla con otro distinto. Es como si escribieras en español pero el lector aplicara las reglas de pronunciación del alemán: el resultado es un sinsentido.
                 </p>
             </div>
 
-            <div class="p-10 space-y-10">
+            <div class="p-8 md:p-12 space-y-12">
+                <!-- Controles -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm">
-                        <label class="block text-sm font-bold mb-3 text-stone-700">1. Escribe tu texto <span class="text-xs font-normal text-stone-500">(máx. 7 caracteres)</span></label>
-                        <input type="text" id="inputText" value="cañón" maxlength="7" class="w-full p-4 rounded-xl border border-stone-300 focus:ring-4 focus:ring-indigo-100 outline-none font-bold text-xl text-indigo-900 shadow-inner">
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition">
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-3 text-stone-500">1. Escribe (máx 7 letras)</label>
+                        <input type="text" id="inputText" value="cañón" maxlength="7" class="w-full p-4 rounded-xl border border-stone-300 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none font-bold text-2xl text-indigo-900 shadow-inner bg-white">
                     </div>
-                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 shadow-sm">
-                        <label class="block text-sm font-bold mb-3 text-indigo-800">2. Al guardar (Codificación real)</label>
-                        <select id="saveEncoding" class="w-full p-4 rounded-xl border border-indigo-200 bg-white shadow-sm font-medium">
-                            <option value="UTF-8">UTF-8 (Doble byte para caracteres locales)</option>
-                            <option value="windows-1252">ANSI (Un solo byte siempre)</option>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition">
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-3 text-indigo-600">2. Guardar (Codificación real)</label>
+                        <select id="saveEncoding" class="w-full p-4 rounded-xl border border-indigo-200 bg-white shadow-sm font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-200 outline-none">
+                            <option value="UTF-8">UTF-8 (Estándar Moderno)</option>
+                            <option value="windows-1252">ANSI (Estándar Antiguo)</option>
                         </select>
                     </div>
-                    <div class="bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm">
-                        <label class="block text-sm font-bold mb-3 text-red-800">3. Al abrir (Interpretación visual)</label>
-                        <select id="readEncoding" class="w-full p-4 rounded-xl border border-red-200 bg-white shadow-sm font-medium">
-                            <option value="windows-1252">ANSI (Diccionario antiguo)</option>
-                            <option value="UTF-8">UTF-8 (Diccionario moderno)</option>
+                    <div class="bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition">
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-3 text-red-600">3. Abrir (Interpretación visual)</label>
+                        <select id="readEncoding" class="w-full p-4 rounded-xl border border-red-200 bg-white shadow-sm font-medium text-red-900 focus:ring-2 focus:ring-red-200 outline-none">
+                            <option value="windows-1252">ANSI (Error común)</option>
+                            <option value="UTF-8">UTF-8 (Correcto)</option>
                         </select>
                     </div>
                 </div>
 
+                <!-- Inspección de flujo -->
                 <div class="space-y-6">
-                    <h3 class="font-bold text-stone-800 text-lg border-l-4 border-indigo-500 pl-4">Inspección del flujo físico:</h3>
-                    <div id="byte-stream-display" class="flex flex-wrap gap-6 overflow-x-auto pb-6 no-scrollbar">
+                    <div class="flex justify-between items-end border-b border-stone-200 pb-2">
+                        <h3 class="font-bold text-stone-800 text-lg flex items-center gap-2">
+                            <span class="bg-indigo-600 w-2 h-6 rounded-full"></span>
+                            Inspección del flujo físico
+                        </h3>
+                        <span id="byte-explanation" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full"></span>
+                    </div>
+                    
+                    <div id="byte-stream-display" class="flex flex-wrap gap-4 overflow-x-auto pb-6 no-scrollbar pt-2">
                         <!-- Generado por JS -->
                     </div>
-                    <p id="byte-explanation" class="text-sm text-indigo-600 font-bold bg-indigo-50 p-3 rounded-lg inline-block italic"></p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center pt-10 border-t border-stone-100">
-                    <div class="text-center lg:text-left">
-                        <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">Resultado visual</h4>
-                        <div id="result-text" class="text-6xl font-mono p-8 bg-stone-900 text-green-400 rounded-2xl shadow-2xl break-all min-h-[140px] flex items-center justify-center"></div>
+                <!-- Resultado -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch pt-6">
+                    <div class="flex flex-col">
+                        <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">Lo que ve el usuario</h4>
+                        <div id="result-text" class="text-5xl md:text-6xl font-mono p-8 bg-stone-900 text-green-400 rounded-2xl shadow-2xl break-all flex-grow flex items-center justify-center min-h-[160px] border-4 border-stone-800"></div>
                     </div>
-                    <div id="analysis-box" class="p-8 rounded-2xl bg-stone-50 border border-stone-200 text-indigo-950 text-lg leading-relaxed shadow-sm">
-                        <!-- Análisis dinámico -->
+                    <div class="flex flex-col">
+                        <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">Diagnóstico</h4>
+                        <div id="analysis-box" class="p-8 rounded-2xl bg-white border border-stone-200 text-stone-700 text-lg leading-relaxed shadow-sm flex-grow flex items-center">
+                            <!-- Análisis dinámico -->
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- 5. Soluciones -->
-        <section id="solution" class="bg-white rounded-3xl shadow-xl p-10 border border-stone-100">
-            <h2 class="text-3xl font-bold text-stone-800 mb-8 text-center lg:text-left">Guía rápida de soluciones</h2>
-            <div class="text-stone-600 text-lg mb-10 text-center lg:text-left max-w-4xl mx-auto lg:mx-0">
-                <p class="mb-4">Cuando abres un archivo y el texto no es legible, es vital entender qué está ocurriendo internamente:</p>
-                <ul class="space-y-3 bg-stone-50 p-6 rounded-xl border border-stone-200">
-                    <li class="flex items-start gap-3">
-                        <span class="text-2xl">🧐</span>
-                        <span>Si ves <strong>símbolos extraños</strong> (ej. <code>Ã±</code>), el archivo suele ser <strong>UTF-8</strong> (correcto) pero tu editor lo está leyendo como <strong>ANSI</strong> (incorrecto).</span>
+        <section id="solution" class="bg-white rounded-3xl shadow-xl p-10 md:p-12 border border-stone-100">
+            <h2 class="text-3xl font-bold text-stone-800 mb-8">Guía rápida de soluciones</h2>
+            
+            <div class="mb-12 bg-stone-50 p-8 rounded-2xl border border-stone-200">
+                <p class="text-lg text-stone-700 mb-4 font-medium">Diagnóstico rápido visual:</p>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-4">
+                        <span class="text-3xl filter grayscale contrast-150">🧐</span>
+                        <div>
+                            <p class="font-bold text-stone-800">Símbolos extraños (ej. <code>Ã±</code>)</p>
+                            <p class="text-sm text-stone-500">El archivo es <strong>UTF-8</strong> (correcto) pero tu editor lee <strong>ANSI</strong>.</p>
+                        </div>
                     </li>
-                    <li class="flex items-start gap-3">
-                        <span class="text-2xl">⚠️</span>
-                        <span>Si ves <strong>rombos negros con interrogación</strong> (), es probable que el archivo sea <strong>ANSI</strong> pero tu editor espere <strong>UTF-8</strong>. El byte ANSI no es válido en UTF-8 y se rompe.</span>
+                    <li class="flex items-start gap-4">
+                        <span class="text-3xl">⚠️</span>
+                        <div>
+                            <p class="font-bold text-stone-800">Rombos negros ()</p>
+                            <p class="text-sm text-stone-500">El archivo es <strong>ANSI</strong> pero tu editor espera <strong>UTF-8</strong>. El byte ANSI rompe la validación.</p>
+                        </div>
                     </li>
                 </ul>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="p-8 bg-blue-50 border-l-8 border-blue-500 rounded-xl shadow-sm hover:shadow-md transition">
-                    <h3 class="text-2xl font-bold text-blue-900 mb-4">A: Codificar en...</h3>
-                    <p class="text-blue-800">
-                        Esto es <strong>interpretar</strong>. No cambias ni un solo bit del archivo; solo le dices al editor: "Oye, prueba con otras gafas". Al elegir la codificación correcta, el texto se arregla mágicamente porque la información subyacente siempre estuvo bien.
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="p-8 bg-blue-50 border-l-8 border-blue-500 rounded-r-2xl hover:bg-blue-100 transition duration-300">
+                    <h3 class="text-2xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                        <span class="bg-blue-200 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center text-sm">A</span>
+                        Codificar en...
+                    </h3>
+                    <p class="text-blue-800 font-medium mb-2">Acción: INTERPRETAR</p>
+                    <p class="text-sm text-blue-700 leading-relaxed">
+                        No tocas el archivo. Solo le dices al editor "cambia de gafas". Si el texto se arregla, es que los datos estaban bien. <strong>Es la primera opción a probar siempre.</strong>
                     </p>
                 </div>
-                <div class="p-8 bg-green-50 border-l-8 border-green-500 rounded-xl shadow-sm hover:shadow-md transition">
-                    <h3 class="text-2xl font-bold text-green-900 mb-4">B: Convertir a...</h3>
-                    <p class="text-green-800">
-                        Esto es <strong>transformar</strong>. Reescribes físicamente los bytes del archivo. Si usas esto cuando el texto se ve mal, estarás guardando permanentemente la interpretación errónea. ¡El archivo original se perderá para siempre!
+                <div class="p-8 bg-green-50 border-l-8 border-green-500 rounded-r-2xl hover:bg-green-100 transition duration-300">
+                    <h3 class="text-2xl font-bold text-green-900 mb-3 flex items-center gap-2">
+                        <span class="bg-green-200 text-green-800 w-8 h-8 rounded-full flex items-center justify-center text-sm">B</span>
+                        Convertir a...
+                    </h3>
+                    <p class="text-green-800 font-medium mb-2">Acción: TRANSFORMAR</p>
+                    <p class="text-sm text-green-700 leading-relaxed">
+                        Reescribes los bytes del disco. <strong>Peligro:</strong> Si conviertes un texto que ya se ve mal, guardarás el error para siempre. Úsalo solo cuando el texto ya se lea bien.
                     </p>
                 </div>
             </div>
 
-            <div class="mt-16 p-8 bg-stone-100 rounded-2xl border-2 border-dashed border-stone-300">
-                <h4 class="font-bold text-xl mb-6 text-stone-800 text-center lg:text-left">Dilema del traductor profesional</h4>
-                <p class="text-lg mb-6 text-center lg:text-left">Abres un archivo y en lugar de «atención» lees <code class="bg-white px-3 py-1 rounded-lg text-red-600 font-black shadow-sm">«atenciÃ³n»</code>. <br><span class="text-sm text-stone-500 italic">(Nota: Esto ocurre porque el archivo se guardó como UTF-8 pero lo estás abriendo como ANSI).</span> ¿Qué debes hacer?</p>
+            <div class="p-10 bg-white rounded-2xl border-2 border-dashed border-stone-300 relative">
+                <div class="absolute -top-5 left-10 bg-white px-4 py-1 font-bold text-stone-400 uppercase tracking-widest text-xs border border-stone-200 rounded-full">Caso Práctico</div>
+                <h4 class="font-bold text-xl mb-4 text-stone-800">Dilema del traductor</h4>
+                <p class="text-lg mb-8 text-stone-600">Abres un archivo y lees: <code class="bg-stone-100 px-3 py-1 rounded text-red-600 font-black border border-stone-200 mx-1">«atenciÃ³n»</code>. <br><span class="text-sm text-stone-400 italic">(Causa: Archivo UTF-8 abierto como ANSI).</span> ¿Qué debes hacer?</p>
                 
-                <div class="flex gap-6 flex-wrap justify-center lg:justify-start mb-6">
-                    <button onclick="checkScenario(true)" class="btn-decision px-8 py-4 rounded-xl font-bold text-lg shadow-sm">Probar con «Codificar en UTF-8»</button>
-                    <button onclick="checkScenario(false)" class="btn-decision px-8 py-4 rounded-xl font-bold text-lg shadow-sm">Usar «Convertir a ANSI»</button>
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button onclick="checkScenario(true)" class="btn-decision px-6 py-4 rounded-xl font-bold text-lg shadow-sm flex-1">Probar «Codificar en UTF-8»</button>
+                    <button onclick="checkScenario(false)" class="btn-decision px-6 py-4 rounded-xl font-bold text-lg shadow-sm flex-1">Usar «Convertir a ANSI»</button>
                 </div>
                 
-                <div id="scenario-result-box" class="hidden p-6 rounded-xl border-2 mb-6 text-center bg-white">
-                    <span class="block text-xs uppercase font-bold tracking-widest mb-2 text-stone-400">Resultado de tu acción:</span>
-                    <span id="scenario-result-text" class="text-4xl font-mono font-bold"></span>
+                <div id="scenario-result-box" class="hidden p-6 rounded-xl border-2 mb-6 text-center bg-stone-50 transition-all">
+                    <span class="block text-xs uppercase font-bold tracking-widest mb-2 text-stone-400">Resultado en pantalla:</span>
+                    <span id="scenario-result-text" class="text-4xl font-mono font-bold block mb-2"></span>
                 </div>
 
-                <div id="scenario-feedback" class="font-medium text-lg hidden p-5 rounded-xl border-l-4 bg-white shadow-sm"></div>
+                <div id="scenario-feedback" class="font-medium text-lg hidden p-6 rounded-xl border-l-4 bg-white shadow-lg animate-fade-in"></div>
             </div>
         </section>
 
         <!-- 6. Supervivencia en código -->
-        <section id="escaping" class="bg-slate-900 rounded-3xl shadow-xl p-10 border border-slate-800 text-white">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-6 text-center lg:text-left">Supervivencia en código: escapado de caracteres</h2>
-                <p class="text-slate-300 text-lg mb-8">
-                    A veces no puedes usar caracteres especiales directamente porque el formato del archivo no lo permite (como en HTML antiguo o archivos `.properties` de Java). En esos casos, usamos "entidades" o códigos de escape para representar la letra de forma segura usando solo ASCII.
+        <section id="escaping" class="bg-slate-900 rounded-3xl shadow-2xl p-10 md:p-14 border border-slate-800 text-white relative overflow-hidden">
+            <!-- Decorative background elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-green-500 rounded-full mix-blend-overlay filter blur-[100px] opacity-10"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-overlay filter blur-[100px] opacity-10"></div>
+
+            <div class="max-w-5xl mx-auto relative z-10">
+                <h2 class="text-3xl font-bold mb-6 text-white border-b border-slate-700 pb-4 inline-block">Supervivencia en código: escapado</h2>
+                
+                <p class="text-slate-300 text-lg mb-6 leading-relaxed">
+                    A veces no puedes usar caracteres especiales directamente (HTML antiguo, Java properties). Usamos códigos de escape para representar la letra de forma segura con solo ASCII.
                 </p>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <label class="block text-sm font-bold mb-3 text-slate-300">Escribe un carácter especial (ej. ñ, €, á)</label>
-                        <input type="text" id="escapeInput" value="ñ" maxlength="1" class="w-full p-4 rounded-xl border-0 bg-white text-slate-900 focus:ring-4 focus:ring-indigo-500 outline-none font-bold text-4xl text-center shadow-lg mb-2">
-                        <p class="text-xs text-slate-500 text-center">Escribe solo una letra</p>
+                <div class="bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500 mb-10">
+                    <p class="text-slate-300 text-sm italic">
+                        <strong>¿Por qué?</strong> Unicode es el "pasaporte universal". Al representar un carácter por su código numérico (ej. <code>\u00F1</code>), blindamos el texto contra errores de interpretación en cualquier sistema del mundo.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                    <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                        <label class="block text-sm font-bold mb-4 text-indigo-400 uppercase tracking-wider">Entrada (1 carácter)</label>
+                        <input type="text" id="escapeInput" value="ñ" maxlength="1" class="w-full p-6 rounded-xl border-2 border-slate-600 bg-slate-900 text-white focus:border-indigo-500 focus:outline-none font-bold text-5xl text-center shadow-inner mb-4 transition-colors">
+                        <p class="text-xs text-slate-500 text-center">Prueba con: ñ, €, @, á</p>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="space-y-6 font-mono">
                         <!-- HTML Entities Box -->
-                        <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-inner">
-                            <span class="block text-xs uppercase font-bold text-slate-500 mb-4 tracking-wider">Para HTML (Entidades)</span>
-                            <div class="space-y-3 font-mono">
+                        <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-2xl relative group">
+                            <div class="absolute top-3 right-3 text-[10px] font-bold text-slate-600 border border-slate-800 px-2 py-1 rounded">HTML</div>
+                            <span class="block text-xs uppercase font-bold text-slate-500 mb-4 tracking-wider group-hover:text-green-500 transition-colors">Entidades</span>
+                            <div class="space-y-4">
                                 <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                                     <span class="text-slate-500 text-xs">Nombrada</span>
-                                    <span id="htmlNamed" class="text-green-400 font-bold text-xl"></span>
+                                    <span id="htmlNamed" class="text-green-400 font-bold text-xl">&ntilde;</span>
                                 </div>
                                 <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                                     <span class="text-slate-500 text-xs">Decimal</span>
-                                    <span id="htmlDecimal" class="text-green-400 font-bold text-xl"></span>
+                                    <span id="htmlDecimal" class="text-green-400 font-bold text-xl">&#241;</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 text-xs">Hexadecimal</span>
-                                    <span id="htmlHex" class="text-green-400 font-bold text-xl"></span>
+                                    <span id="htmlHex" class="text-green-400 font-bold text-xl">&#xF1;</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Java Escape Box -->
-                        <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-inner">
-                            <span class="block text-xs uppercase font-bold text-slate-500 mb-2 tracking-wider">Para Java / C++ (Unicode Escape)</span>
-                            <span id="javaOutput" class="font-mono text-3xl text-yellow-400 font-bold">\u00F1</span>
+                        <div class="bg-black p-6 rounded-xl border border-slate-700 shadow-2xl relative group">
+                            <div class="absolute top-3 right-3 text-[10px] font-bold text-slate-600 border border-slate-800 px-2 py-1 rounded">JAVA / JS</div>
+                            <span class="block text-xs uppercase font-bold text-slate-500 mb-4 tracking-wider group-hover:text-yellow-500 transition-colors">Unicode Escape</span>
+                            <div class="text-center">
+                                <span id="javaOutput" class="text-yellow-400 font-bold text-3xl">\u00F1</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -349,14 +413,16 @@
 
     </main>
 
-    <footer class="bg-stone-900 text-stone-500 py-16 text-center">
+    <footer class="bg-stone-900 text-stone-400 py-16 mt-20 border-t border-stone-800">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-lg font-medium">Recurso pedagógico para localización de software</p>
-            <p class="mt-3 text-sm opacity-50 tracking-widest">&copy; 2026 · ADN DIGITAL DEL TEXTO</p>
+            <p class="text-lg font-medium text-stone-300">Recurso pedagógico para localización de software</p>
+            <p class="mt-4 text-sm opacity-60 tracking-widest">&copy; 2026 Jesús Torres del Rey · Con soporte de Gemini</p>
         </div>
     </footer>
 
+    <!-- Scripts de lógica -->
     <script>
+        // --- 1. CONFIGURACIÓN DE BITS ---
         const bitContainer = document.getElementById('bit-container');
         const decimalDisplay = document.getElementById('decimal-display');
         const hexDisplay = document.getElementById('hex-display');
@@ -368,22 +434,29 @@
             bits.forEach((bit, index) => {
                 const val = Math.pow(2, 7 - index);
                 const btn = document.createElement('div');
-                btn.className = `bit-switch w-12 h-20 border-2 rounded-xl flex flex-col justify-end items-center cursor-pointer shadow-sm ${bit ? 'active' : 'bg-white border-stone-200'}`;
+                btn.className = `bit-switch w-10 h-16 md:w-12 md:h-20 border-2 rounded-xl flex flex-col justify-end items-center cursor-pointer shadow-sm transition-all transform active:scale-95 select-none ${bit ? 'active' : 'bg-white border-stone-200 hover:border-indigo-300'}`;
                 btn.onclick = () => { bits[index] = bits[index] ? 0 : 1; renderBits(); };
+                
                 const label = document.createElement('span');
-                label.className = `text-[11px] font-bold mb-2 ${bit ? 'text-white' : 'text-stone-400'}`;
+                label.className = `text-[10px] md:text-[11px] font-bold mb-2 ${bit ? 'text-white' : 'text-stone-400'}`;
                 label.innerText = val;
-                btn.innerHTML = `<div class="w-3 h-3 rounded-full mb-3 ${bit ? 'bg-white shadow-[0_0_8px_white]' : 'bg-stone-100'}"></div>`;
+                
+                const indicator = document.createElement('div');
+                indicator.className = `w-2 h-2 md:w-3 md:h-3 rounded-full mb-3 ${bit ? 'bg-white shadow-[0_0_8px_white]' : 'bg-stone-100'}`;
+                
+                btn.appendChild(indicator);
                 btn.appendChild(label);
                 bitContainer.appendChild(btn);
             });
             const decimal = parseInt(bits.join(''), 2);
             decimalDisplay.innerText = decimal;
             hexDisplay.innerText = decimal.toString(16).toUpperCase().padStart(2, '0');
+            
             const bStr = bits.join('');
             binaryDisplayFormatted.innerText = bStr.substring(0,4) + ' ' + bStr.substring(4);
         }
 
+        // --- 2. SIMULADOR MOJIBAKE ---
         function simulate() {
             const text = document.getElementById('inputText').value;
             const lowerText = text.toLowerCase();
@@ -396,6 +469,7 @@
             visor.innerHTML = '';
             let allBytes = [];
             
+            // Preparar decoder para lectura individual de bytes (para visualizar el error)
             let individualInterpretDecoder;
             try {
                 individualInterpretDecoder = new TextDecoder(readEnc);
@@ -403,115 +477,144 @@
                 individualInterpretDecoder = new TextDecoder('windows-1252');
             }
 
+            // Procesar carácter a carácter para mantener la estructura visual
             for (let char of lowerText) {
                 let charBytes;
                 const codePoint = char.charCodeAt(0);
 
+                // Codificación (Guardar)
                 if (saveEnc === 'UTF-8') {
                     charBytes = new TextEncoder().encode(char);
                 } else {
                     charBytes = simpleAnsiEncode(char);
                 }
                 
+                // Contenedor del carácter
                 const charGroup = document.createElement('div');
-                charGroup.className = "flex flex-col items-center gap-2 border-2 border-stone-100 p-4 rounded-2xl bg-white shadow-sm hover:border-indigo-200 transition";
+                charGroup.className = "flex flex-col items-center gap-2 border-2 border-stone-100 p-3 rounded-xl bg-white shadow-sm transition hover:border-indigo-200 hover:shadow-md";
                 
-                // --- RESTORED: Character Label ---
+                // Etiqueta superior (La letra original)
                 const charLabel = document.createElement('div');
-                charLabel.className = "text-xs font-black text-indigo-500 uppercase tracking-tighter mb-1";
+                charLabel.className = "text-xs font-black text-indigo-500 uppercase tracking-tighter mb-1 border-b-2 border-indigo-50 w-full text-center pb-1";
                 let labelText = char === " " ? "espacio" : `'${char}'`;
+                
+                // Si es multibyte en UTF-8, mostrar el punto de código
                 if (charBytes.length > 1 && saveEnc === 'UTF-8') {
-                    labelText += ` <span class="text-stone-400 font-normal">(${codePoint})</span>`;
+                    labelText += ` <span class="text-stone-300 font-normal ml-1 text-[10px]">(${codePoint})</span>`;
                 }
                 charLabel.innerHTML = labelText;
                 charGroup.appendChild(charLabel);
-                // ---------------------------------
 
                 const bytesContainer = document.createElement('div');
-                bytesContainer.className = "flex gap-3";
+                bytesContainer.className = "flex gap-2";
 
+                // Generar tarjetas para cada byte
                 charBytes.forEach((b, idx) => {
                     const card = document.createElement('div');
-                    card.className = "byte-card bg-stone-50 p-3 rounded-xl border border-stone-100 space-y-2";
+                    card.className = "byte-card bg-stone-50 p-2 rounded-lg border border-stone-200 space-y-1 relative overflow-hidden";
                     
                     let binStr = b.toString(2).padStart(8, '0');
                     let formattedBin = binStr;
                     
+                    // Coloreado de bits (Control vs Datos) para UTF-8
                     if (saveEnc === 'UTF-8' && charBytes.length > 1) {
-                        if (b === charBytes[0]) {
-                            formattedBin = `<span class="bit-control">${binStr.substring(0,3)}</span><span class="bit-data">${binStr.substring(3)}</span>`;
-                        } else {
+                        if (b === charBytes[0]) { // Primer byte (110xxxxx...)
+                            const headerLen = charBytes.length === 2 ? 3 : (charBytes.length === 3 ? 4 : 5);
+                            formattedBin = `<span class="bit-control">${binStr.substring(0, headerLen)}</span><span class="bit-data">${binStr.substring(headerLen)}</span>`;
+                        } else { // Byte continuación (10xxxxxx)
                             formattedBin = `<span class="bit-control">${binStr.substring(0,2)}</span><span class="bit-data">${binStr.substring(2)}</span>`;
                         }
-                    } else if (saveEnc === 'UTF-8' && charBytes.length === 1) {
+                    } else if (saveEnc === 'UTF-8' && charBytes.length === 1) { // ASCII en UTF-8
                         formattedBin = `<span class="bit-control">${binStr.substring(0,1)}</span><span class="bit-data">${binStr.substring(1)}</span>`;
-                    } else {
+                    } else { // ANSI
                         formattedBin = `<span class="bit-data">${binStr}</span>`;
                     }
 
+                    // Interpretación visual individual (lo que ve el "lector ciego")
                     let individualInterpret;
                     if (readEnc === 'UTF-8' && (b >= 0x80)) {
-                         individualInterpret = '';
+                         // UTF-8 no puede leer un byte extendido aislado
+                         individualInterpret = ''; 
                     } else {
+                         // Decodificación simple del byte
                          individualInterpret = individualInterpretDecoder.decode(new Uint8Array([b]));
                     }
+                    // Limpiar caracteres de control invisibles
+                    if (b < 32) individualInterpret = '·';
 
                     card.innerHTML = `
-                        <div class="font-mono font-black text-indigo-600 text-lg uppercase">x${b.toString(16).toUpperCase().padStart(2, '0')}</div>
-                        <div class="text-[10px] text-stone-500 font-bold border-t border-stone-200 pt-1">Dec: ${b}</div>
+                        <div class="font-mono font-black text-indigo-700 text-lg uppercase tracking-wider">x${b.toString(16).toUpperCase().padStart(2, '0')}</div>
                         <div class="text-[9px] text-stone-400 font-mono tracking-tighter">${formattedBin}</div>
-                        <div class="text-[10px] bg-white rounded p-1 border border-stone-100 text-stone-600 font-bold mt-2">
-                           Lector: '${individualInterpret}'
+                        <div class="mt-2 pt-1 border-t border-stone-200 flex justify-between items-center text-[10px]">
+                            <span class="text-stone-400 font-bold">Lector:</span>
+                            <span class="font-bold text-red-500 bg-red-50 px-1 rounded border border-red-100">${individualInterpret}</span>
                         </div>
                     `;
                     bytesContainer.appendChild(card);
                 });
                 
+                charGroup.appendChild(bytesContainer);
+                
+                // Nota al pie si está repartido
                 if (charBytes.length > 1 && saveEnc === 'UTF-8') {
                     const footerNote = document.createElement('div');
-                    footerNote.className = "text-[9px] text-indigo-400 italic mt-1 text-center font-medium uppercase tracking-tight";
-                    footerNote.innerText = `${codePoint} repartido en ${charBytes.length} bytes`;
-                    charGroup.appendChild(bytesContainer);
+                    footerNote.className = "text-[9px] text-indigo-400 italic mt-2 text-center font-medium uppercase tracking-tight w-full bg-indigo-50/50 rounded py-0.5";
+                    footerNote.innerText = `${codePoint} dividido en ${charBytes.length} bytes`;
                     charGroup.appendChild(footerNote);
-                } else {
-                    charGroup.appendChild(bytesContainer);
                 }
 
                 charBytes.forEach(b => allBytes.push(b));
                 visor.appendChild(charGroup);
             }
 
+            // Explicación dinámica breve
             explanation.innerText = saveEnc === 'UTF-8' ? 
-                "✓ Fíjate: UTF-8 detecta caracteres locales y fragmenta su punto de código en varios paquetes." : 
-                "✓ En ANSI, la información está compactada en un solo bloque físico de 8 bits.";
+                "✓ UTF-8: Usa bits grises de control para indicar si el carácter continúa en el siguiente byte." : 
+                "✓ ANSI: Cada carácter se comprime ciegamente en 8 bits, sin estructura flexible.";
 
+            // Decodificación final del mensaje completo
             const decoder = new TextDecoder(readEnc);
-            const decoded = decoder.decode(new Uint8Array(allBytes));
+            let decoded = "";
+            try {
+                decoded = decoder.decode(new Uint8Array(allBytes));
+            } catch (e) { decoded = "Error Fatal"; }
+            
             document.getElementById('result-text').innerText = decoded;
 
+            // Análisis del resultado
             if (text === decoded) {
-                analysis.innerHTML = "<strong>Estado: Todo correcto.</strong> El diccionario de lectura coincide con el de escritura. Los bytes se interpretan como un bloque único y coherente.";
+                analysis.className = "p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-lg leading-relaxed shadow-sm flex-grow flex items-center";
+                analysis.innerHTML = "<strong>✅ Todo correcto.</strong><br>El diccionario de lectura coincide con el de escritura. Los bytes se interpretan coherentemente.";
             } else {
+                analysis.className = "p-8 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-lg leading-relaxed shadow-sm flex-grow flex items-center";
+                
                 if (readEnc === 'windows-1252' && saveEnc === 'UTF-8') {
-                    analysis.innerHTML = `<strong>Estado: Mojibake.</strong> Al usar <strong>ANSI</strong> para leer, el sistema espera estrictamente 1 byte por carácter. Al encontrar los dos bytes de una letra UTF-8, el lector trata cada uno como un símbolo independiente. ¡Por eso ves varios caracteres donde debería haber uno!`;
+                    analysis.innerHTML = `<strong>❌ Mojibake detectado.</strong><br>Estás leyendo con <strong>ANSI</strong> (que espera 1 byte/letra). Al encontrar una letra UTF-8 de 2 bytes, el lector "tonto" lee cada mitad por separado. <br>Resultado: 1 letra original ➝ 2 símbolos basura.`;
                 } else if (saveEnc === 'windows-1252' && readEnc === 'UTF-8') {
-                    analysis.innerHTML = `<strong>Estado: Error de validación ().</strong> Has guardado en ANSI (1 byte). Al leer en UTF-8, el lector encuentra un byte (como F1 para 'ñ') que <strong>no existe por sí solo</strong> en este sistema. Además, empieza por <code>1111...</code>, lo que obliga a esperar 3 bytes más. Al no encontrarlos, declara el dato inválido.`;
+                    analysis.innerHTML = `<strong>❌ Error de validación ().</strong><br>El archivo es ANSI (1 byte). Pero el lector UTF-8 encuentra un byte que empieza por <code>1111...</code> (como la ñ = F1). En UTF-8, eso es una promesa de que vienen 3 bytes más. Al no encontrarlos, declara el dato <strong>inválido</strong>.`;
                 } else {
-                    analysis.innerHTML = `<strong>Estado: Mojibake.</strong> Las tablas de correspondencia no coinciden. El sistema está intentando traducir los números (bytes) usando las reglas de un diccionario equivocado.`;
+                    analysis.innerHTML = `<strong>❌ Incompatibilidad.</strong><br>Las tablas no coinciden. Los números guardados apuntan a casillas diferentes en el diccionario de lectura.`;
                 }
             }
         }
 
+        // Polyfill simple para ANSI (Windows-1252) ya que TextEncoder solo soporta UTF-8
         function simpleAnsiEncode(str) {
             const arr = [];
-            const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80};
+            // Mapa básico para caracteres comunes en español
+            const map = {'ñ':0xF1,'Ñ':0xD1,'á':0xE1,'é':0xE9,'í':0xED,'ó':0xF3,'ú':0xFA,'Á':0xC1,'É':0xC9,'Í':0xCD,'Ó':0xD3,'Ú':0xDA,'ü':0xFC,'Ü':0xDC,'¡':0xA1,'¿':0xBF,'€':0x80, 'º':0xBA, 'ª':0xAA};
             for (let char of str) {
                 const code = char.charCodeAt(0);
-                arr.push(code < 128 ? code : (map[char] || 63));
+                if (code < 128) {
+                    arr.push(code); // ASCII coincide
+                } else {
+                    arr.push(map[char] || 63); // 63 es '?'
+                }
             }
             return new Uint8Array(arr);
         }
 
+        // --- 3. LÓGICA DEL ESCENARIO ---
         function checkScenario(isCorrect) {
             const resultBox = document.getElementById('scenario-result-box');
             const resultText = document.getElementById('scenario-result-text');
@@ -522,25 +625,23 @@
             fb.classList.remove('hidden', 'border-green-500', 'border-red-500', 'text-green-800', 'text-red-800');
 
             if (isCorrect) {
-                // Correct action: Re-interpreting
                 resultBox.classList.add('border-green-200', 'bg-green-50');
                 resultText.innerText = "atención";
                 resultText.classList.add('text-green-700');
                 
-                fb.innerHTML = "<strong>¡Correcto!</strong> Al cambiar la codificación de lectura (las gafas), recuperas el texto original sin dañar el archivo.";
-                fb.classList.add('border-green-500', 'text-green-800');
+                fb.innerHTML = "<strong class='text-xl block mb-2'>¡Correcto! 🎉</strong><br>El archivo ya era UTF-8 válido, solo lo mirabas mal. Al cambiar la interpretación (las gafas), el texto se recupera intacto.";
+                fb.classList.add('border-green-500', 'text-green-800', 'bg-green-50', 'border-2');
             } else {
-                // Incorrect action: Converting corrupted text
                 resultBox.classList.add('border-red-200', 'bg-red-50');
                 resultText.innerText = "atenciÃ³n";
                 resultText.classList.add('text-red-700');
                 
-                fb.innerHTML = "<strong>¡Error fatal!</strong> Has cometido el pecado capital del localizador. Al dar a «Convertir», le has dicho al ordenador: «Esos símbolos raros (`Ã±`) son correctos, quiero guardarlos».<br><br>El editor ha reescrito los bytes del disco duro: ha borrado el código de la «ñ» y ha grabado físicamente los códigos de «Ã» y «±». El texto original ha sido destruido.";
-                fb.classList.add('border-red-500', 'text-red-800');
+                fb.innerHTML = "<strong class='text-xl block mb-2'>¡Error fatal! 💀</strong><br>Has cometido el pecado capital. Al dar a «Convertir», has fijado el error en el disco. Has sobrescrito el código de la «ñ» con los códigos de «Ã» y «³». El texto original se ha perdido para siempre.";
+                fb.classList.add('border-red-500', 'text-red-800', 'bg-red-50', 'border-2');
             }
         }
 
-        // --- ESCAPE LOGIC ---
+        // --- 4. LÓGICA DE ESCAPADO (CÓDIGO) ---
         function updateEscapes() {
             const input = document.getElementById('escapeInput').value;
             const htmlNamed = document.getElementById('htmlNamed');
@@ -558,27 +659,58 @@
 
             const charCode = input.charCodeAt(0);
             
-            // HTML Entity (simple map for demo or numeric fallback)
-            const entities = {'ñ': '&ntilde;', 'Ñ': '&Ntilde;', 'á': '&aacute;', 'é': '&eacute;', 'í': '&iacute;', 'ó': '&oacute;', 'ú': '&uacute;', 'Á': '&Aacute;', 'É': '&Eacute;', 'Í': '&Iacute;', 'Ó': '&Oacute;', 'Ú': '&Uacute;', 'ü': '&uuml;', 'Ü': '&Uuml;', '€': '&euro;', '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'};
+            // Mapa simple de entidades nombradas HTML
+            const entities = {
+                'ñ': '&ntilde;', 'Ñ': '&Ntilde;', 
+                'á': '&aacute;', 'é': '&eacute;', 'í': '&iacute;', 'ó': '&oacute;', 'ú': '&uacute;',
+                'Á': '&Aacute;', 'É': '&Eacute;', 'Í': '&Iacute;', 'Ó': '&Oacute;', 'Ú': '&Uacute;',
+                'ü': '&uuml;', 'Ü': '&Uuml;', 
+                '€': '&euro;', '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;',
+                '¡': '&iexcl;', '¿': '&iquest;'
+            };
             
             htmlNamed.innerText = entities[input] || '(n/a)';
             htmlDecimal.innerText = `&#${charCode};`;
             htmlHex.innerText = `&#x${charCode.toString(16).toUpperCase()};`;
 
-            // Java Unicode
+            // Java/JS Unicode Escape
             const hex = charCode.toString(16).toUpperCase().padStart(4, '0');
             javaOut.innerText = `\\u${hex}`;
         }
 
+        // --- 5. UTILIDADES ---
+        function scrollToSection(id) { 
+            const el = document.getElementById(id);
+            const offset = 80; // height of nav
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = el.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('inputText').addEventListener('input', () => {
+            // Validar longitud visualmente
+            const val = document.getElementById('inputText').value;
+            if(val.length > 7) document.getElementById('inputText').value = val.substring(0,7);
+            simulate();
+        });
+        document.getElementById('saveEncoding').addEventListener('change', simulate);
+        document.getElementById('readEncoding').addEventListener('change', simulate);
         document.getElementById('escapeInput').addEventListener('input', updateEscapes);
 
-        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-
-        document.getElementById('inputText').oninput = simulate;
-        document.getElementById('saveEncoding').onchange = simulate;
-        document.getElementById('readEncoding').onchange = simulate;
-
-        window.onload = () => { renderBits(); simulate(); updateEscapes(); };
+        // Init
+        window.onload = () => { 
+            renderBits(); 
+            simulate(); 
+            updateEscapes(); 
+        };
     </script>
 </body>
 </html>
+```
